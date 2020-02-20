@@ -1,16 +1,14 @@
-﻿using System;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Azure.Devices.Client;
+﻿using Microsoft.Azure.Devices.Client;
 using Newtonsoft.Json;
-
+using System;
+using System.Text;
 
 namespace SmartMeterSimulator
 {
     /// <summary>
     /// A sensor represents a Smart Meter in the simulator.
     /// </summary>
-    class Sensor
+    internal class Sensor
     {
         private DeviceClient _DeviceClient;
         private string _IotHubUri { get; set; }
@@ -20,6 +18,7 @@ namespace SmartMeterSimulator
         public string StatusWindow { get; set; }
         public string ReceivedMessage { get; set; }
         public double? ReceivedTemperatureSetting { get; set; }
+
         public double CurrentTemperature
         {
             get
@@ -33,17 +32,18 @@ namespace SmartMeterSimulator
                     // If we received a cloud-to-device message that sets the temperature, override with the received value.
                     currentTemperature = ReceivedTemperatureSetting.Value;
                 }
-                
-                if(currentTemperature <= 68)
+
+                if (currentTemperature <= 68)
                     TemperatureIndicator = SensorState.Cold;
-                else if(currentTemperature > 68 && currentTemperature < 72)
+                else if (currentTemperature > 68 && currentTemperature < 72)
                     TemperatureIndicator = SensorState.Normal;
-                else if(currentTemperature >= 72)
+                else if (currentTemperature >= 72)
                     TemperatureIndicator = SensorState.Hot;
 
                 return currentTemperature;
             }
         }
+
         public SensorState TemperatureIndicator { get; set; }
 
         public Sensor(string iotHubUri, string deviceId, string deviceKey)
@@ -53,6 +53,7 @@ namespace SmartMeterSimulator
             DeviceKey = deviceKey;
             State = DeviceState.Registered;
         }
+
         public void InstallDevice(string statusWindow)
         {
             StatusWindow = statusWindow;
@@ -64,12 +65,12 @@ namespace SmartMeterSimulator
         /// </summary>
         public void ConnectDevice()
         {
-            //TODO: 17. Connect the Device to Iot Hub by creating an instance of DeviceClient
-            //_DeviceClient = DeviceClient.Create(_IotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(..., ...));
+            _DeviceClient = DeviceClient.Create(_IotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey(DeviceId, DeviceKey));
 
             //Set the Device State to Ready
             State = DeviceState.Ready;
         }
+
         public void DisconnectDevice()
         {
             //Delete the local device client
@@ -91,15 +92,15 @@ namespace SmartMeterSimulator
                 temp = CurrentTemperature
             };
 
-            //TODO: 18.Serialize the telemetryDataPoint to JSON
-            //var messageString = JsonConvert...;
+            var messageString = JsonConvert.SerializeObject(telemetryDataPoint);
 
-            //TODO: 19.Encode the JSON string to ASCII as bytes and create new Message with the bytes
-            //var message = new Message(...);
+            var message = new Message(Encoding.ASCII.GetBytes(messageString));
 
-            //TODO: 20.Send the message to the IoT Hub
-            //var sendEventAsync = _DeviceClient?.SendEventAsync(...);
-            //if (sendEventAsync != null) await...;
+            var sendEventAsync = _DeviceClient?.SendEventAsync(message);
+            if (sendEventAsync != null)
+            {
+                await sendEventAsync;
+            }
         }
 
         /// <summary>
@@ -114,12 +115,12 @@ namespace SmartMeterSimulator
                 if (receivedMessage == null)
                 {
                     ReceivedMessage = null;
+
                     return;
                 }
 
-                //TODO: 21.Set the received message for this sensor to the string value of the message byte array
-                //ReceivedMessage = Encoding.ASCII.GetString(...);
-                if(double.TryParse(ReceivedMessage, out var requestedTemperature))
+                ReceivedMessage = Encoding.ASCII.GetString(receivedMessage.GetBytes());
+                if (double.TryParse(ReceivedMessage, out var requestedTemperature))
                 {
                     ReceivedTemperatureSetting = requestedTemperature;
                 }
@@ -133,8 +134,7 @@ namespace SmartMeterSimulator
                 // that prevented the device app from completing the processing of the message,
                 // IoT Hub delivers it again.
 
-                //TODO: 22.Send acknowledgement to IoT hub that the message was processed
-                //await _DeviceClient?.CompleteAsync(...);
+                await _DeviceClient?.CompleteAsync(receivedMessage);
             }
             catch (NullReferenceException ex)
             {
@@ -145,13 +145,14 @@ namespace SmartMeterSimulator
     }
 
     public enum DeviceState
-    { 
+    {
         Registered,
         Installed,
         Activated,
         Ready,
         Transmit
     }
+
     public enum SensorState
     {
         Cold,

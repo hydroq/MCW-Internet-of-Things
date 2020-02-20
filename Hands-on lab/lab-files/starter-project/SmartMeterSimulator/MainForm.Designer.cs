@@ -243,7 +243,7 @@
             this.lblIotHubCnString.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblIotHubCnString.Location = new System.Drawing.Point(28, 9);
             this.lblIotHubCnString.Name = "lblIotHubCnString";
-            this.lblIotHubCnString.Size = new System.Drawing.Size(463, 54);
+            this.lblIotHubCnString.Size = new System.Drawing.Size(189, 21);
             this.lblIotHubCnString.TabIndex = 23;
             this.lblIotHubCnString.Text = "IoT Hub Connection String";
             // 
@@ -257,6 +257,8 @@
             this.txtIotHubCnString.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtIotHubCnString.Size = new System.Drawing.Size(530, 40);
             this.txtIotHubCnString.TabIndex = 0;
+            this.txtIotHubCnString.Text = "HostName=smartmeter-hub-bk.azure-devices.net;SharedAccessKeyName=iothubowner;Shar" +
+    "edAccessKey=U91GiLU5kbaDsqrwnsWmXG/xkca9A8vPRjfpVlcEPfo=";
             // 
             // lvSensorData
             // 
@@ -264,6 +266,7 @@
             this.colDeviceID,
             this.colSensorData,
             this.colDateTime});
+            this.lvSensorData.HideSelection = false;
             this.lvSensorData.Location = new System.Drawing.Point(35, 279);
             this.lvSensorData.Name = "lvSensorData";
             this.lvSensorData.ShowGroups = false;
@@ -294,7 +297,7 @@
             this.lblSensorInfo.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSensorInfo.Location = new System.Drawing.Point(47, 636);
             this.lblSensorInfo.Name = "lblSensorInfo";
-            this.lblSensorInfo.Size = new System.Drawing.Size(0, 54);
+            this.lblSensorInfo.Size = new System.Drawing.Size(0, 21);
             this.lblSensorInfo.TabIndex = 30;
             // 
             // groupBox1
@@ -317,7 +320,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(251, 19);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(172, 38);
+            this.label3.Size = new System.Drawing.Size(70, 13);
             this.label3.TabIndex = 36;
             this.label3.Text = "< 68 degrees";
             // 
@@ -337,7 +340,7 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(145, 18);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(185, 38);
+            this.label2.Size = new System.Drawing.Size(75, 13);
             this.label2.TabIndex = 34;
             this.label2.Text = "68-72 degrees";
             // 
@@ -357,7 +360,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(39, 19);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(172, 38);
+            this.label1.Size = new System.Drawing.Size(69, 13);
             this.label1.TabIndex = 32;
             this.label1.Text = "> 72 degrees";
             // 
@@ -614,7 +617,7 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(14F, 37F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.ClientSize = new System.Drawing.Size(766, 692);
